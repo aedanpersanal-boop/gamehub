@@ -1,156 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="The Daily Brief — a clean, simple news website demo.">
-  <title>The Daily Brief — News & Stories</title>
-  <style>
-    :root {
-      --ink: #17212b;
-      --muted: #697681;
-      --line: #e5e9ec;
-      --paper: #ffffff;
-      --soft: #f4f6f7;
-      --accent: #c63d32;
-      --max: 1120px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    a:hover { color: var(--accent); }
-    .topline { background: var(--ink); color: #fff; font-size: 12px; }
-    .topline-inner, .masthead, .nav-inner, main, footer {
-      width: min(var(--max), calc(100% - 40px));
-      margin: auto;
-    }
-    .topline-inner { display:flex; justify-content:space-between; padding:8px 0; color:#d8dee3; }
-    .masthead { display:flex; align-items:center; justify-content:space-between; padding:26px 0 20px; }
-    .brand { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 43px); font-weight:700; letter-spacing:-2px; line-height:1; }
-    .brand span { color:var(--accent); }
-    .tagline { color:var(--muted); font-size:13px; }
-    .nav { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-    .nav-inner { display:flex; gap:28px; overflow-x:auto; white-space:nowrap; }
-    .nav a { display:block; padding:13px 0; font-size:13px; font-weight:700; }
-    .nav a:first-child { color:var(--accent); }
-    .breaking { margin:24px 0; display:flex; align-items:center; gap:13px; padding:10px 14px; background:var(--soft); font-size:13px; }
-    .breaking strong { color:var(--accent); text-transform:uppercase; font-size:11px; letter-spacing:1px; }
-    .breaking span { color:var(--muted); }
-    .section-label { display:flex; align-items:center; gap:12px; margin:0 0 17px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; }
-    .section-label:after { content:""; height:1px; background:var(--line); flex:1; }
-    .lead-grid { display:grid; grid-template-columns: minmax(0, 1.7fr) minmax(240px, .9fr); gap:30px; }
-    .hero-image { min-height:310px; background:linear-gradient(130deg,#263e50,#79929c 55%,#d2b99b); display:flex; align-items:flex-end; padding:24px; color:#fff; position:relative; overflow:hidden; }
-    .hero-image:before { content:""; position:absolute; inset:0; background:linear-gradient(0deg,rgba(0,0,0,.55),transparent 70%); }
-    .hero-image .image-caption { position:relative; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
-    .eyebrow { color:var(--accent); text-transform:uppercase; font-size:11px; font-weight:800; letter-spacing:1.2px; margin:15px 0 7px; }
-    h1,h2,h3,p { margin-top:0; }
-    h1 { font-family:Georgia,serif; font-size:clamp(29px,4vw,43px); line-height:1.12; letter-spacing:-.8px; margin-bottom:12px; }
-    .summary { color:var(--muted); font-size:15px; max-width:680px; }
-    .byline { color:var(--muted); font-size:12px; margin-top:15px; }
-    .side-stories { border-left:1px solid var(--line); padding-left:24px; }
-    .side-story { padding:0 0 17px; margin-bottom:17px; border-bottom:1px solid var(--line); }
-    .side-story:last-child { border:0; }
-    .side-story .eyebrow { margin-top:0; }
-    .side-story h3 { font-family:Georgia,serif; font-size:19px; line-height:1.25; margin-bottom:6px; }
-    .side-story p { color:var(--muted); font-size:13px; margin:0; }
-    .content-grid { display:grid; grid-template-columns:minmax(0, 1fr) 285px; gap:38px; margin:42px 0 60px; }
-    .stories { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:25px; }
-    .story-card { border-bottom:1px solid var(--line); padding-bottom:20px; }
-    .thumb { height:145px; margin-bottom:13px; background:linear-gradient(135deg,#d7e0e3,#879ba4); }
-    .thumb.t2 { background:linear-gradient(135deg,#d8c8ae,#9d8067); }
-    .thumb.t3 { background:linear-gradient(135deg,#b8c7b7,#617f70); }
-    .thumb.t4 { background:linear-gradient(135deg,#d4d8e7,#777f9e); }
-    .story-card .eyebrow { margin:0 0 7px; }
-    .story-card h2 { font-family:Georgia,serif; font-size:21px; line-height:1.25; margin-bottom:8px; }
-    .story-card p { color:var(--muted); font-size:13px; margin-bottom:10px; }
-    .story-card small { color:var(--muted); font-size:11px; }
-    .sidebar-box { background:var(--soft); padding:20px; margin-bottom:20px; }
-    .sidebar-box h3 { font-family:Georgia,serif; font-size:21px; margin-bottom:12px; }
-    .popular { list-style:none; padding:0; margin:0; counter-reset:rank; }
-    .popular li { counter-increment:rank; display:flex; gap:12px; padding:11px 0; border-top:1px solid var(--line); font-family:Georgia,serif; font-weight:700; line-height:1.3; }
-    .popular li:before { content:"0" counter(rank); color:var(--accent); font:700 13px Arial,sans-serif; }
-    .newsletter p { color:var(--muted); font-size:13px; }
-    .newsletter input { width:100%; border:1px solid #d5dce0; padding:11px; font:inherit; margin:4px 0 9px; }
-    .newsletter button { width:100%; border:0; background:var(--ink); color:#fff; padding:11px; font-weight:700; cursor:pointer; }
-    .newsletter button:hover { background:var(--accent); }
-    footer { border-top:1px solid var(--line); padding:22px 0 35px; display:flex; justify-content:space-between; color:var(--muted); font-size:12px; }
-    @media (max-width:760px) {
-      .tagline { display:none; }
-      .lead-grid,.content-grid { grid-template-columns:1fr; }
-      .side-stories { border-left:0; border-top:1px solid var(--line); padding:20px 0 0; display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
-      .side-story { margin:0; }
-      .content-grid { gap:25px; margin-top:30px; }
-    }
-    @media (max-width:480px) {
-      .topline-inner, .masthead, .nav-inner, main, footer { width:calc(100% - 28px); }
-      .stories { grid-template-columns:1fr; }
-      .hero-image { min-height:220px; }
-      .side-stories { grid-template-columns:1fr; }
-      .breaking { align-items:flex-start; }
-      footer { flex-direction:column; gap:5px; }
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10150f">
+<meta name="description" content="Live incident coverage of the Shrek Virus internet outbreak.">
+<title>OUTBREAK WATCH — Shrek Virus</title>
+<style>
+:root{--bg:#10150f;--panel:#192219;--panel2:#202d20;--green:#9bd34a;--lime:#c5ef72;--text:#f1f4e9;--muted:#aab5a0;--red:#ff655e;--line:#354332}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Arial,Helvetica,sans-serif}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}
+.alertbar{background:#702a25;color:white;text-align:center;padding:9px 14px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+header{border-bottom:1px solid var(--line);background:#141c13}.head{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:18px}.brand{font-size:27px;font-weight:900;letter-spacing:-1.4px}.brand b{color:var(--green)}.brand small{display:block;font-size:9px;letter-spacing:3px;color:var(--muted);font-weight:700}.live{color:#ff8b80;font-size:11px;font-weight:900;letter-spacing:1.5px}.live:before{content:"";display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-right:8px;box-shadow:0 0 12px var(--red)}
+nav{border-top:1px solid var(--line)}.nav{display:flex;gap:26px;overflow:auto;white-space:nowrap}.nav a{padding:12px 0;font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase}.nav a:first-child{color:var(--lime)}
+main{padding:28px 0 60px}.ticker{background:#252f20;border:1px solid #45533a;padding:10px 14px;display:flex;gap:14px;align-items:center;margin-bottom:28px;font-size:12px}.ticker strong{background:var(--red);color:#190f0d;padding:4px 7px;font-size:10px;letter-spacing:1px}.ticker span{color:#e0e8d8}
+h1,h2,h3,p{margin-top:0}.kicker{color:var(--lime);font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:26px;align-items:stretch}.hero-main{background:linear-gradient(130deg,#31452c,#1b2a1b 65%,#101810);border:1px solid #43543a;padding:clamp(22px,4vw,42px);position:relative;overflow:hidden;min-height:340px}.hero-main:after{content:"🟢";position:absolute;font-size:180px;right:18px;bottom:-35px;opacity:.14;transform:rotate(-14deg)}h1{font-size:clamp(34px,5vw,58px);line-height:1.02;letter-spacing:-2px;max-width:680px;margin:13px 0 16px;position:relative;z-index:1}.hero-main p{color:#c7d2bd;max-width:600px;position:relative;z-index:1}.stamp{display:inline-block;border:1px solid var(--red);color:#ff9b91;padding:5px 9px;font-size:10px;font-weight:900;letter-spacing:1.5px;transform:rotate(-2deg);margin-top:15px}
+.hero-side{background:var(--panel);border:1px solid var(--line);padding:22px}.hero-side h2{font-size:17px;margin:8px 0 16px}.metric{padding:13px 0;border-top:1px solid var(--line)}.metric small{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.metric strong{font-size:31px;line-height:1.3;color:var(--lime);font-variant-numeric:tabular-nums}.metric em{font-style:normal;color:var(--muted);font-size:11px;margin-left:7px}
+.section-head{display:flex;align-items:center;gap:12px;margin:34px 0 15px}.section-head h2{font-size:13px;letter-spacing:1.8px;text-transform:uppercase;margin:0}.section-head:after{content:"";height:1px;background:var(--line);flex:1}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);padding:22px}.panel h3{font-size:18px;margin-bottom:7px}.muted{color:var(--muted)}
+.map{min-height:260px;background-color:#172319;background-image:linear-gradient(rgba(145,190,105,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(145,190,105,.07) 1px,transparent 1px);background-size:26px 26px;position:relative;overflow:hidden;border:1px solid #344832;margin-top:15px}.map:before{content:"";position:absolute;width:65%;height:65%;left:18%;top:15%;border:2px solid #536d43;border-radius:48% 52% 43% 57%;transform:rotate(-20deg);opacity:.7}.map:after{content:"";position:absolute;width:33%;height:45%;left:42%;top:28%;border:2px solid #536d43;border-radius:55% 40% 55% 40%;transform:rotate(25deg);opacity:.7}.pin{position:absolute;z-index:2;background:var(--lime);color:#17200f;border-radius:20px;padding:4px 8px;font-size:10px;font-weight:900;box-shadow:0 0 16px #9bd34a66}.p1{left:27%;top:33%}.p2{left:58%;top:51%}.p3{left:73%;top:23%}.p4{left:43%;top:72%}.map-note{position:absolute;bottom:10px;left:12px;color:var(--muted);font-size:10px;z-index:3}
+table{width:100%;border-collapse:collapse;font-size:12px}td{padding:11px 5px;border-top:1px solid var(--line);vertical-align:top}td:last-child{text-align:right;color:var(--lime);font-weight:800}.status{color:#ffb1a9!important}
+.report{border-top:1px solid var(--line);padding:15px 0}.report:first-of-type{border:0}.report time{color:var(--lime);font-size:10px;font-weight:900;letter-spacing:1px}.report h3{font-size:16px;margin:5px 0}.report p{font-size:12px;color:var(--muted);margin:0}
+.notice{border-left:3px solid var(--green);background:#202c1d;padding:15px 17px;margin-top:18px;font-size:12px;color:#d3ddcb}.notice b{color:var(--lime)}
+footer{border-top:1px solid var(--line);padding:22px 0 35px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:15px}
+@media(max-width:760px){.hero,.grid{grid-template-columns:1fr}.hero-main{min-height:300px}.head{align-items:flex-start;flex-direction:column}.metric strong{font-size:27px}}
+@media(max-width:440px){.wrap{width:calc(100% - 26px)}.ticker{align-items:flex-start}.hero-main{padding:22px}h1{letter-spacing:-1px}.panel{padding:16px}footer{flex-direction:column}}
+</style>
 </head>
 <body>
-  <div class="topline"><div class="topline-inner"><span>Independent news. Clear perspective.</span><span id="today"></span></div></div>
-  <header>
-    <div class="masthead">
-      <a class="brand" href="#">THE DAILY<span>.</span> BRIEF</a>
-      <div class="tagline">The stories that matter, without the noise.</div>
-    </div>
-    <nav class="nav" aria-label="Main navigation"><div class="nav-inner">
-      <a href="#top">Home</a><a href="#latest">Latest</a><a href="#world">World</a><a href="#business">Business</a><a href="#technology">Technology</a><a href="#culture">Culture</a><a href="#sport">Sport</a>
-    </div></nav>
-  </header>
-  <main id="top">
-    <div class="breaking"><strong>Editor's note</strong><span>This is a sample news homepage. Replace these demo headlines with your own articles.</span></div>
-    <div class="section-label">Top story</div>
-    <section class="lead-grid">
-      <article>
-        <div class="hero-image"><span class="image-caption">The Daily Brief · Featured report</span></div>
-        <div class="eyebrow">World · Featured</div>
-        <h1>A changing world: the stories shaping tomorrow</h1>
-        <p class="summary">A closer look at the ideas, people and decisions making headlines — and what they could mean for the days ahead.</p>
-        <div class="byline">By The News Desk &nbsp;·&nbsp; 6 min read</div>
-      </article>
-      <aside class="side-stories" aria-label="More top stories">
-        <article class="side-story"><div class="eyebrow">Technology</div><h3>What comes next in the rapidly changing world of technology?</h3><p>Exploring the trends and questions worth watching.</p></article>
-        <article class="side-story"><div class="eyebrow">Business</div><h3>Small businesses find new ways to reach their communities</h3><p>Local ideas are making a big difference.</p></article>
-        <article class="side-story"><div class="eyebrow">Culture</div><h3>The creative voices bringing fresh energy to the arts</h3><p>Meet the people shaping the conversation.</p></article>
-      </aside>
-    </section>
-    <section class="content-grid" id="latest">
-      <div>
-        <div class="section-label">Latest stories</div>
-        <div class="stories">
-          <article class="story-card" id="world"><div class="thumb"></div><div class="eyebrow">World</div><h2>Communities look ahead with new plans for the future</h2><p>A roundup of the projects and conversations making an impact in towns and cities.</p><small>Today · 4 min read</small></article>
-          <article class="story-card" id="business"><div class="thumb t2"></div><div class="eyebrow">Business</div><h2>The changing habits reshaping the high street</h2><p>How shoppers, independent stores and local services are adapting to a new era.</p><small>Today · 5 min read</small></article>
-          <article class="story-card" id="technology"><div class="thumb t3"></div><div class="eyebrow">Technology</div><h2>Simple innovations solving everyday problems</h2><p>Practical ideas show how technology can make daily life a little easier.</p><small>Yesterday · 3 min read</small></article>
-          <article class="story-card" id="culture"><div class="thumb t4"></div><div class="eyebrow">Culture</div><h2>Why local events continue to bring people together</h2><p>From music to food, shared experiences remain at the heart of community life.</p><small>Yesterday · 4 min read</small></article>
-        </div>
-      </div>
-      <aside>
-        <div class="sidebar-box"><div class="section-label">Most read</div><ol class="popular"><li>Five stories to keep an eye on this week</li><li>How new ideas are changing everyday life</li><li>The people making a difference locally</li></ol></div>
-        <div class="sidebar-box newsletter"><h3>The daily briefing</h3><p>A simple newsletter sign-up demo. Add your mailing service to collect subscribers.</p><form id="newsletter-form"><input type="email" placeholder="Your email address" aria-label="Your email address" required><button type="submit">Sign me up</button></form><small id="form-message" role="status"></small></div>
-      </aside>
-    </section>
-  </main>
-  <footer><span>© <span id="year"></span> The Daily Brief. Demo publication.</span><span>Built for clear, simple reading.</span></footer>
-  <script>
-    const now = new Date();
-    document.getElementById('today').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('year').textContent = now.getFullYear();
-    document.getElementById('newsletter-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      document.getElementById('form-message').textContent = 'Thanks! This demo form is not connected to a mailing list yet.';
-      this.reset();
-    });
-  </script>
-</body>
-</html>
+<div class="alertbar">⚠ Global cyber incident · Elevated activity detected across the web</div>
+<header><div class="wrap head"><a class="brand" href="#">OUTBREAK<b>WATCH</b><small>THE INTERNET INCIDENT NETWORK</small></a><div class="live">LIVE INCIDENT FEED</div></div><nav><div class="wrap nav"><a href="#overview">Overview</a><a href="#impact">Impact tracker</a><a href="#reports">Latest reports</a><a href="#advisory">Safety advisory</a></div></nav></header>
+<main class="wrap" id="overview">
+<div class="ticker"><strong>BREAKING</strong><span>Shrek-themed content continues appearing on affected pages · Incident status: ACTIVE</span></div>
+<section class="hero">
+<article class="hero-main"><div class="kicker">Special coverage / Network disruption</div><h1>THE SHREK VIRUS IS TAKING OVER THE INTERNET</h1><p>Websites are reporting unexpected green makeovers, movie-themed images and mysterious references to swamps. Our incident desk is tracking the spread as administrators race to restore their pages.</p><div class="stamp">SEVERITY LEVEL: SWAMP</div></article>
+<aside class="hero-side"><div class="kicker">Live impact dashboard</div><h2>Incident snapshot</h2><div class="metric"><small>Websites affected</small><strong id="sites">24,891</strong><em>↑ rising</em></div><div class="metric"><small>Pages transformed</small><strong id="pages">183,420</strong></div><div class="metric"><small>Known image swaps</small><strong id="images">61,072</strong></div><div class="metric"><small>Internet status</small><strong style="font-size:20px;color:#ff8b80">UNDER ATTACK</strong></div></aside>
+</section>
+<section id="impact"><div class="section-head"><h2>Global impact tracker</h2></div><div class="grid">
+<div class="panel"><div class="kicker">Spread overview</div><h3>Outbreak activity map</h3><p class="muted" style="font-size:12px">Illustrative incident hotspots based on reports received by the desk.</p><div class="map"><span class="pin p1">N. AMERICA</span><span class="pin p2">EUROPE</span><span class="pin p3">ASIA</span><span class="pin p4">S. AMERICA</span><span class="map-note">INCIDENT HOTSPOTS · NOT LIVE GEOLOCATION</span></div></div>
+<div class="panel"><div class="kicker">Reported casualties</div><h3>What has been hit?</h3><p class="muted" style="font-size:12px">Reported digital damage across monitored services.</p><table><tr><td>Websites partially Shrekified</td><td>12,406</td></tr><tr><td>Homepages fully transformed</td><td>8,219</td></tr><tr><td>Images replaced with movie-themed art</td><td>61,072</td></tr><tr><td>Text converted to swamp-speak</td><td>183,420</td></tr><tr><td>Admin dashboards disrupted</td><td>1,266</td></tr></table></div>
+</div></section>
+<section id="reports"><div class="section-head"><h2>Latest incident reports</h2></div><div class="panel">
+<article class="report"><time>20:24 UTC · EUROPE</time><h3>Major news homepage replaced by a wall of green</h3><p>Visitors report headlines rewritten with swamp references and every thumbnail replaced by Shrek-themed imagery. Technical teams are investigating.</p></article>
+<article class="report"><time>19:58 UTC · NORTH AMERICA</time><h3>Online game portals report sudden theme changes</h3><p>Several gaming pages display ogre-themed banners, altered buttons and unexpected soundtrack references.</p></article>
+<article class="report"><time>19:31 UTC · ASIA-PACIFIC</time><h3>Image libraries see wave of unexpected replacements</h3><p>Site operators say ordinary image assets appear to have been swapped for green, swamp and fairy-tale themed visuals.</p></article>
+<article class="report"><time>18:46 UTC · GLOBAL</time><h3>Developers urged to check recent website changes</h3><p>Administrators are reviewing content changes, account access and backups while the incident remains active.</p></article>
+</div></section>
+<section id="advisory"><div class="section-head"><h2>Administrator advisory</h2></div><div class="panel"><div class="kicker">Recommended response</div><h3>Keep calm. Check your site.</h3><p class="muted" style="font-size:13px">If your website starts displaying unexpected content, review recent deployments and account activity, rotate exposed credentials, restore clean files from a trusted backup and contact your hosting provider. Avoid running unknown scripts or downloads claiming to remove the incident.</p><div class="notice"><b>Incident desk note:</b> The figures and reports on this page are illustrative dashboard data for the Shrek Virus scenario, not verified real-world casualty statistics. The map is a visual overview, not a live tracking system.</div></div></section>
+</main>
+<footer class="wrap"><span>© 2026 OUTBREAK WATCH · INTERNET INCIDENT NETWORK</span><span>Monitoring the web. Reporting the swamp.</span></footer>
+<script>
+const start={sites:24891,pages:183420,images:61072};
+function tick(){for(const key of Object.keys(start)){start[key]+=Math.floor(Math.random()*(key==='sites'?5:key==='pages'?24:12));document.getElementById(key).textContent=start[key].toLocaleString('en-US')}}
+setInterval(tick,6500);
+</script>
+</body></html>
