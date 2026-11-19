@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Daily Brief — a clean, simple news website demo.">
+  <title>The Daily Brief — News & Stories</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #697681;
+      --line: #e5e9ec;
+      --paper: #ffffff;
+      --soft: #f4f6f7;
+      --accent: #c63d32;
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .topline { background: var(--ink); color: #fff; font-size: 12px; }
+    .topline-inner, .masthead, .nav-inner, main, footer {
+      width: min(var(--max), calc(100% - 40px));
+      margin: auto;
+    }
+    .topline-inner { display:flex; justify-content:space-between; padding:8px 0; color:#d8dee3; }
+    .masthead { display:flex; align-items:center; justify-content:space-between; padding:26px 0 20px; }
+    .brand { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 43px); font-weight:700; letter-spacing:-2px; line-height:1; }
+    .brand span { color:var(--accent); }
+    .tagline { color:var(--muted); font-size:13px; }
+    .nav { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .nav-inner { display:flex; gap:28px; overflow-x:auto; white-space:nowrap; }
+    .nav a { display:block; padding:13px 0; font-size:13px; font-weight:700; }
+    .nav a:first-child { color:var(--accent); }
+    .breaking { margin:24px 0; display:flex; align-items:center; gap:13px; padding:10px 14px; background:var(--soft); font-size:13px; }
+    .breaking strong { color:var(--accent); text-transform:uppercase; font-size:11px; letter-spacing:1px; }
+    .breaking span { color:var(--muted); }
+    .section-label { display:flex; align-items:center; gap:12px; margin:0 0 17px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; }
+    .section-label:after { content:""; height:1px; background:var(--line); flex:1; }
+    .lead-grid { display:grid; grid-template-columns: minmax(0, 1.7fr) minmax(240px, .9fr); gap:30px; }
+    .hero-image { min-height:310px; background:linear-gradient(130deg,#263e50,#79929c 55%,#d2b99b); display:flex; align-items:flex-end; padding:24px; color:#fff; position:relative; overflow:hidden; }
+    .hero-image:before { content:""; position:absolute; inset:0; background:linear-gradient(0deg,rgba(0,0,0,.55),transparent 70%); }
+    .hero-image .image-caption { position:relative; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; font-size:11px; font-weight:800; letter-spacing:1.2px; margin:15px 0 7px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-family:Georgia,serif; font-size:clamp(29px,4vw,43px); line-height:1.12; letter-spacing:-.8px; margin-bottom:12px; }
+    .summary { color:var(--muted); font-size:15px; max-width:680px; }
+    .byline { color:var(--muted); font-size:12px; margin-top:15px; }
+    .side-stories { border-left:1px solid var(--line); padding-left:24px; }
+    .side-story { padding:0 0 17px; margin-bottom:17px; border-bottom:1px solid var(--line); }
+    .side-story:last-child { border:0; }
+    .side-story .eyebrow { margin-top:0; }
+    .side-story h3 { font-family:Georgia,serif; font-size:19px; line-height:1.25; margin-bottom:6px; }
+    .side-story p { color:var(--muted); font-size:13px; margin:0; }
+    .content-grid { display:grid; grid-template-columns:minmax(0, 1fr) 285px; gap:38px; margin:42px 0 60px; }
+    .stories { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:25px; }
+    .story-card { border-bottom:1px solid var(--line); padding-bottom:20px; }
+    .thumb { height:145px; margin-bottom:13px; background:linear-gradient(135deg,#d7e0e3,#879ba4); }
+    .thumb.t2 { background:linear-gradient(135deg,#d8c8ae,#9d8067); }
+    .thumb.t3 { background:linear-gradient(135deg,#b8c7b7,#617f70); }
+    .thumb.t4 { background:linear-gradient(135deg,#d4d8e7,#777f9e); }
+    .story-card .eyebrow { margin:0 0 7px; }
+    .story-card h2 { font-family:Georgia,serif; font-size:21px; line-height:1.25; margin-bottom:8px; }
+    .story-card p { color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .story-card small { color:var(--muted); font-size:11px; }
+    .sidebar-box { background:var(--soft); padding:20px; margin-bottom:20px; }
+    .sidebar-box h3 { font-family:Georgia,serif; font-size:21px; margin-bottom:12px; }
+    .popular { list-style:none; padding:0; margin:0; counter-reset:rank; }
+    .popular li { counter-increment:rank; display:flex; gap:12px; padding:11px 0; border-top:1px solid var(--line); font-family:Georgia,serif; font-weight:700; line-height:1.3; }
+    .popular li:before { content:"0" counter(rank); color:var(--accent); font:700 13px Arial,sans-serif; }
+    .newsletter p { color:var(--muted); font-size:13px; }
+    .newsletter input { width:100%; border:1px solid #d5dce0; padding:11px; font:inherit; margin:4px 0 9px; }
+    .newsletter button { width:100%; border:0; background:var(--ink); color:#fff; padding:11px; font-weight:700; cursor:pointer; }
+    .newsletter button:hover { background:var(--accent); }
+    footer { border-top:1px solid var(--line); padding:22px 0 35px; display:flex; justify-content:space-between; color:var(--muted); font-size:12px; }
+    @media (max-width:760px) {
+      .tagline { display:none; }
+      .lead-grid,.content-grid { grid-template-columns:1fr; }
+      .side-stories { border-left:0; border-top:1px solid var(--line); padding:20px 0 0; display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+      .side-story { margin:0; }
+      .content-grid { gap:25px; margin-top:30px; }
+    }
+    @media (max-width:480px) {
+      .topline-inner, .masthead, .nav-inner, main, footer { width:calc(100% - 28px); }
+      .stories { grid-template-columns:1fr; }
+      .hero-image { min-height:220px; }
+      .side-stories { grid-template-columns:1fr; }
+      .breaking { align-items:flex-start; }
+      footer { flex-direction:column; gap:5px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline"><div class="topline-inner"><span>Independent news. Clear perspective.</span><span id="today"></span></div></div>
+  <header>
+    <div class="masthead">
+      <a class="brand" href="#">THE DAILY<span>.</span> BRIEF</a>
+      <div class="tagline">The stories that matter, without the noise.</div>
+    </div>
+    <nav class="nav" aria-label="Main navigation"><div class="nav-inner">
+      <a href="#top">Home</a><a href="#latest">Latest</a><a href="#world">World</a><a href="#business">Business</a><a href="#technology">Technology</a><a href="#culture">Culture</a><a href="#sport">Sport</a>
+    </div></nav>
+  </header>
+  <main id="top">
+    <div class="breaking"><strong>Editor's note</strong><span>This is a sample news homepage. Replace these demo headlines with your own articles.</span></div>
+    <div class="section-label">Top story</div>
+    <section class="lead-grid">
+      <article>
+        <div class="hero-image"><span class="image-caption">The Daily Brief · Featured report</span></div>
+        <div class="eyebrow">World · Featured</div>
+        <h1>A changing world: the stories shaping tomorrow</h1>
+        <p class="summary">A closer look at the ideas, people and decisions making headlines — and what they could mean for the days ahead.</p>
+        <div class="byline">By The News Desk &nbsp;·&nbsp; 6 min read</div>
+      </article>
+      <aside class="side-stories" aria-label="More top stories">
+        <article class="side-story"><div class="eyebrow">Technology</div><h3>What comes next in the rapidly changing world of technology?</h3><p>Exploring the trends and questions worth watching.</p></article>
+        <article class="side-story"><div class="eyebrow">Business</div><h3>Small businesses find new ways to reach their communities</h3><p>Local ideas are making a big difference.</p></article>
+        <article class="side-story"><div class="eyebrow">Culture</div><h3>The creative voices bringing fresh energy to the arts</h3><p>Meet the people shaping the conversation.</p></article>
+      </aside>
+    </section>
+    <section class="content-grid" id="latest">
+      <div>
+        <div class="section-label">Latest stories</div>
+        <div class="stories">
+          <article class="story-card" id="world"><div class="thumb"></div><div class="eyebrow">World</div><h2>Communities look ahead with new plans for the future</h2><p>A roundup of the projects and conversations making an impact in towns and cities.</p><small>Today · 4 min read</small></article>
+          <article class="story-card" id="business"><div class="thumb t2"></div><div class="eyebrow">Business</div><h2>The changing habits reshaping the high street</h2><p>How shoppers, independent stores and local services are adapting to a new era.</p><small>Today · 5 min read</small></article>
+          <article class="story-card" id="technology"><div class="thumb t3"></div><div class="eyebrow">Technology</div><h2>Simple innovations solving everyday problems</h2><p>Practical ideas show how technology can make daily life a little easier.</p><small>Yesterday · 3 min read</small></article>
+          <article class="story-card" id="culture"><div class="thumb t4"></div><div class="eyebrow">Culture</div><h2>Why local events continue to bring people together</h2><p>From music to food, shared experiences remain at the heart of community life.</p><small>Yesterday · 4 min read</small></article>
+        </div>
+      </div>
+      <aside>
+        <div class="sidebar-box"><div class="section-label">Most read</div><ol class="popular"><li>Five stories to keep an eye on this week</li><li>How new ideas are changing everyday life</li><li>The people making a difference locally</li></ol></div>
+        <div class="sidebar-box newsletter"><h3>The daily briefing</h3><p>A simple newsletter sign-up demo. Add your mailing service to collect subscribers.</p><form id="newsletter-form"><input type="email" placeholder="Your email address" aria-label="Your email address" required><button type="submit">Sign me up</button></form><small id="form-message" role="status"></small></div>
+      </aside>
+    </section>
+  </main>
+  <footer><span>© <span id="year"></span> The Daily Brief. Demo publication.</span><span>Built for clear, simple reading.</span></footer>
+  <script>
+    const now = new Date();
+    document.getElementById('today').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('year').textContent = now.getFullYear();
+    document.getElementById('newsletter-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      document.getElementById('form-message').textContent = 'Thanks! This demo form is not connected to a mailing list yet.';
+      this.reset();
+    });
+  </script>
+</body>
+</html>
